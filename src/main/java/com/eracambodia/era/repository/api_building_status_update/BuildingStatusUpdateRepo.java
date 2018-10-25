@@ -10,7 +10,7 @@ import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BuildingStatusUpdateRepo {
+public interface  BuildingStatusUpdateRepo {
 
     @Select(value = "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{userId},#{bookingPrice})}")
     @Results({

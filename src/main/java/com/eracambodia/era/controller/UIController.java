@@ -13,11 +13,6 @@ import java.util.Locale;
 public class UIController {
     @GetMapping({"/","/index"})
     public String starter() {
-        return "index";
-    }
-    @GetMapping("/doc")
-    public String swagger(){
         return "redirect:/swagger-ui.html";
     }
-
 }
