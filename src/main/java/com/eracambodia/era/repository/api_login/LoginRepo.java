@@ -39,13 +39,13 @@ public interface LoginRepo {
 
     @Insert("INSERT INTO onesignal(user_id,player_id) " +
             "VALUES (#{userId},#{playerId}) ")
-    int savePlayerId(@Param("userId")int userId,@Param("playerId")String playerId);
+    int savePlayerId(@Param("userId") int userId, @Param("playerId") String playerId);
 
     @Select("SELECT player_id,user_id " +
             "FROM onesignal ")
     @Results({
-            @Result(property = "userId",column = "user_id"),
-            @Result(property = "playerId",column = "player_id")
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "playerId", column = "player_id")
     })
     List<CheckPlayerId> getPlayerId();
 

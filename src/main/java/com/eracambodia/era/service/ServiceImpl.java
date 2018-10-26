@@ -78,7 +78,7 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public String checkLogin(Login login,String playerId) {
+    public String checkLogin(Login login, String playerId) {
         String password = loginRepo.checkLogin(login);
         if (password == null) {
             throw new CustomException(404, "Email Not Found.");
@@ -87,28 +87,28 @@ public class ServiceImpl implements Service {
             throw new CustomException(404, "email or password not correct.");
         }
         if (BCrypt.checkpw(login.getPassword(), password)) {
-            Integer userId=loginRepo.checkEmail(login.getEmail());
+            Integer userId = loginRepo.checkEmail(login.getEmail());
             if (userId == null) {
                 throw new CustomException(401, "account need to approve from admin.");
             }
 
             //save player id when login
-            if(playerId!=null && playerId.length()>1) {
-                List<CheckPlayerId> checkPlayerIds=loginRepo.getPlayerId();
-                if(checkPlayerIds.size()<1 || checkPlayerIds==null){
-                    loginRepo.savePlayerId(userId,playerId);
-                }else {
-                    boolean playerIdExits=false;
-                    for (int i=0;i<checkPlayerIds.size();i++){
-                        if(checkPlayerIds.get(i).getPlayerId().equalsIgnoreCase(playerId) && checkPlayerIds.get(i).getUserId() == userId ){
+            if (playerId != null && playerId.length() > 1) {
+                List<CheckPlayerId> checkPlayerIds = loginRepo.getPlayerId();
+                if (checkPlayerIds.size() < 1 || checkPlayerIds == null) {
+                    loginRepo.savePlayerId(userId, playerId);
+                } else {
+                    boolean playerIdExits = false;
+                    for (int i = 0; i < checkPlayerIds.size(); i++) {
+                        if (checkPlayerIds.get(i).getPlayerId().equalsIgnoreCase(playerId) && checkPlayerIds.get(i).getUserId() == userId) {
                             playerIdExits = true;
                             break;
-                        }else {
+                        } else {
                             playerIdExits = false;
                         }
                     }
-                    if(!playerIdExits)
-                        loginRepo.savePlayerId(userId,playerId);
+                    if (!playerIdExits)
+                        loginRepo.savePlayerId(userId, playerId);
 
                 }
             }
@@ -176,22 +176,23 @@ public class ServiceImpl implements Service {
     // api building/status/update
     @Autowired
     private BuildingStatusUpdateRepo buildingStatusUpdateRepo;
+
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public BuildingUpdate updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email) {
-        TransactionOwner transactionOwner=buildingStatusUpdateRepo.checkTransactionOwner(buildingStatusUpdate.getOwnerId());
+        TransactionOwner transactionOwner = buildingStatusUpdateRepo.checkTransactionOwner(buildingStatusUpdate.getOwnerId());
         int id = buildingStatusUpdateRepo.getUserEmail(email);
-        if(transactionOwner!=null && transactionOwner.getUserId()!=id && !transactionOwner.getStatus().equalsIgnoreCase("available")){
+        if (transactionOwner != null && transactionOwner.getUserId() != id && !transactionOwner.getStatus().equalsIgnoreCase("available")) {
             throw new CustomException(403, "This property already has owner.");
         }
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
             throw new CustomException(404, "Building not found");
         }
         buildingStatusUpdate.setUserId(id);
-        BuildingUpdate result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
-        Notification notification=new Notification();
+        BuildingUpdate result = buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
+        Notification notification = new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
-        pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
+        pushFavorite(notification, buildingStatusUpdate.getStatus(), email, id);
         return result;
     }
 
@@ -206,7 +207,7 @@ public class ServiceImpl implements Service {
     private RegisterRepo registerRepo;
 
     @Override
-    public void register(Register register, String jwtToken,String playerId) {
+    public void register(Register register, String jwtToken, String playerId) {
         String message = "";
         RegisterUniqueFields registerUniqueFields = new RegisterUniqueFields();
         if (registerRepo.getIdCard(register.getIdCard()) != null) {
@@ -223,28 +224,29 @@ public class ServiceImpl implements Service {
         }
         if (message.length() > 1)
             throw new CustomException(409, message, registerUniqueFields);
-        if(jwtToken!=null){
+        if (jwtToken != null) {
             String email = DecodeJWT.getEmailFromJwt(jwtToken);
             Integer userId = registerRepo.getIdByEmail(email);
-            Integer registerId=registerRepo.register(register,userId);
+            Integer registerId = registerRepo.register(register, userId);
             try {
                 sendMail(register.getEmail());
             } catch (MessagingException e) {
-                throw new CustomException(400,"Email not invalid.");
+                throw new CustomException(400, "Email not invalid.");
             } catch (IOException e) {
-                throw new CustomException(400,"IOException");
+                throw new CustomException(400, "IOException");
             }
             registerRepo.enable(register.getEmail());
-            if(playerId!=null) {
+            if (playerId != null) {
                 registerRepo.savePlayerId(registerId, playerId);
             }
-        }else {
-            Integer registerId=registerRepo.register(register,null);
-            if(playerId!=null){
-                registerRepo.savePlayerId(registerId,playerId);
+        } else {
+            Integer registerId = registerRepo.register(register, null);
+            if (playerId != null) {
+                registerRepo.savePlayerId(registerId, playerId);
             }
         }
     }
+
     public void sendMail(String email) throws AddressException, MessagingException, IOException {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -368,8 +370,8 @@ public class ServiceImpl implements Service {
         if (agentFavorites.size() < 1) {
             throw new CustomException(404, "No record.");
         }
-        for(int i=0;i<agentFavorites.size();i++){
-            if(agentFavorites.get(i).getStatus().equalsIgnoreCase("available")){
+        for (int i = 0; i < agentFavorites.size(); i++) {
+            if (agentFavorites.get(i).getStatus().equalsIgnoreCase("available")) {
                 agentFavorites.get(i).setAgent(null);
             }
         }
@@ -385,7 +387,7 @@ public class ServiceImpl implements Service {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void addFavorite(AgentAddFavorite agentAddFavorite, String email) {
         agentAddFavorite.setUserId(agentAddFavoriteRepo.getUserIdByEmail(email));
-        if(agentAddFavoriteRepo.buildingAvailable(agentAddFavorite.getOwnerId())<1){
+        if (agentAddFavoriteRepo.buildingAvailable(agentAddFavorite.getOwnerId()) < 1) {
             throw new CustomException(404, "Cant not favorite.Building Not found.");
         }
         if (agentAddFavoriteRepo.addFavorite(agentAddFavorite) < 1) {
@@ -464,21 +466,21 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<String> findPlayerId(String email,int ownerId,Integer agentId) {
+    public List<String> findPlayerId(String email, int ownerId, Integer agentId) {
         List<String> playerIds = notiToFavoritorRepo.findPlayerId(agentId, ownerId);
-        List<String> playerIdChanger=notiToFavoritorRepo.findSpecificPlayerId(agentId);
-        if(playerIds.size()>1&&playerIdChanger.size()>1)
+        List<String> playerIdChanger = notiToFavoritorRepo.findSpecificPlayerId(agentId);
+        if (playerIds.size() > 1 && playerIdChanger.size() > 1)
             playerIds.removeAll(playerIdChanger);
         if (playerIds.size() < 1) {
-            playerIds=null;
+            playerIds = null;
         }
         return playerIds;
     }
 
-    private void pushFavorite(Notification notification,String status, String email,Integer agentId) {
-        List<String> playerIds = this.findPlayerId(email, notification.getBuildingID(),agentId);
-        if(playerIds!=null) {
-            String buildingUUID=notiToFavoritorRepo.getBuildingUUID(notification.getBuildingID());
+    private void pushFavorite(Notification notification, String status, String email, Integer agentId) {
+        List<String> playerIds = this.findPlayerId(email, notification.getBuildingID(), agentId);
+        if (playerIds != null) {
+            String buildingUUID = notiToFavoritorRepo.getBuildingUUID(notification.getBuildingID());
             String buildingName = notiToFavoritorRepo.buildingName(notification.getBuildingID());
             String agentName = notiToFavoritorRepo.agentName(email);
             String title = "Status Changed";
@@ -554,38 +556,39 @@ public class ServiceImpl implements Service {
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<Agent> findAgentProcess(String status, String email, Pagination pagination) {
-        List<Agent> newList=new ArrayList<>();
-        List<Agent> newListAgentCount=new ArrayList<>();
+        List<Agent> newList = new ArrayList<>();
+        List<Agent> newListAgentCount = new ArrayList<>();
         if (status.equalsIgnoreCase("all")) {
             List<Agent> list = agentRepo.findAgentsAllProcess(email, pagination);
-            newList=listAgentProcess(list);
+            newList = listAgentProcess(list);
             if (newList.size() < 1) {
-                throw new CustomException(404, "No record of "+status);
+                throw new CustomException(404, "No record of " + status);
             }
-            List<Agent> listAgentCount=agentRepo.countAgentAllProcess(email);
-            newListAgentCount=listAgentProcess(listAgentCount);
+            List<Agent> listAgentCount = agentRepo.countAgentAllProcess(email);
+            newListAgentCount = listAgentProcess(listAgentCount);
             pagination.setTotalItem(newListAgentCount.size());
             return newList;
         } else {
             List<Agent> list = agentRepo.findAgentsProcess(status, email, pagination);
 
-            newList=listAgentProcess(list);
+            newList = listAgentProcess(list);
 
             if (newList.size() < 1) {
                 throw new CustomException(404, "No record of " + status);
             }
-            List<Agent> listAgentCount=agentRepo.countAgentProcess(email,status);
-            newListAgentCount=listAgentProcess(listAgentCount);
+            List<Agent> listAgentCount = agentRepo.countAgentProcess(email, status);
+            newListAgentCount = listAgentProcess(listAgentCount);
             pagination.setTotalItem(newListAgentCount.size());
             return newList;
         }
     }
-    private List<Agent> listAgentProcess(List<Agent>list){
-        List<Agent> newList=new ArrayList<>();
-        for(int i=0;i<list.size();i++){
-            Integer userId=agentRepo.checkAgentTransaction(list.get(i).getId());
-            if(userId!=null){
-                if(list.get(i).getUserId()==userId){
+
+    private List<Agent> listAgentProcess(List<Agent> list) {
+        List<Agent> newList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Integer userId = agentRepo.checkAgentTransaction(list.get(i).getId());
+            if (userId != null) {
+                if (list.get(i).getUserId() == userId) {
                     newList.add(list.get(i));
                 }
             }
@@ -604,8 +607,8 @@ public class ServiceImpl implements Service {
         Double totalPrice = agentCommission.getBuildingCompleted();
         List<AgentGot> listAgentGot = agentCommissionRepo.getAgentCommissionAmount(uuid);
         agentCommission.setAgentGot(agentAmount(listAgentGot, totalPrice));
-        if(agentCommission.getCount()<1){
-            throw new CustomException(404,"Not found.");
+        if (agentCommission.getCount() < 1) {
+            throw new CustomException(404, "Not found.");
         }
         return agentCommission;
     }
@@ -640,12 +643,13 @@ public class ServiceImpl implements Service {
     //api/users
     @Autowired
     private UsersRepo usersRepo;
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public List<Users> getUsers(String role,String name,Pagination pagination) {
-        List<Users> users=usersRepo.getUsers(role,name,pagination);
-        if(users==null || users.size()<1)
-            throw new CustomException(404,"No data.");
+    public List<Users> getUsers(String role, String name, Pagination pagination) {
+        List<Users> users = usersRepo.getUsers(role, name, pagination);
+        if (users == null || users.size() < 1)
+            throw new CustomException(404, "No data.");
         pagination.setTotalItem(usersRepo.countUsers(role));
         return users;
     }
@@ -653,33 +657,37 @@ public class ServiceImpl implements Service {
     //api/user/upgrade_to_agent
     @Autowired
     private UserUpgradeRepo userUpgradeRepo;
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void upgradeToAgent(int userId, Integer leaderId) {
-        Integer id=userUpgradeRepo.upgradeToAgent(userId,leaderId);
-        if(id<1)
-            throw new CustomException(400,"Update Fails.");
+        Integer id = userUpgradeRepo.upgradeToAgent(userId, leaderId);
+        if (id < 1)
+            throw new CustomException(400, "Update Fails.");
     }
+
     //api/user?id
     @Autowired
     private UserIdRepo userIdRepo;
+
     @Override
     public com.eracambodia.era.model.api_userid.User findUserById(String uuid) {
-        com.eracambodia.era.model.api_userid.User user=userIdRepo.findUserById(uuid);
-        if(user==null)
-            throw new CustomException(404,"User not exist");
+        com.eracambodia.era.model.api_userid.User user = userIdRepo.findUserById(uuid);
+        if (user == null)
+            throw new CustomException(404, "User not exist");
         return user;
     }
 
     //api/building/files
     @Autowired
     private BuildingFileRepo buildingFileRepo;
+
     @Override
     public List<File> getBuildingFiles(String uuid) {
-        int id=buildingFileRepo.buildingIdToUUID(uuid);
-        List<File> files=buildingFileRepo.getBuildingFiles(1);
-        if(files==null || files.size()<1){
-            throw new CustomException(404,"File not found.");
+        int id = buildingFileRepo.buildingIdToUUID(uuid);
+        List<File> files = buildingFileRepo.getBuildingFiles(1);
+        if (files == null || files.size() < 1) {
+            throw new CustomException(404, "File not found.");
         }
         return files;
     }

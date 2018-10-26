@@ -14,11 +14,11 @@ public interface UserIdRepo {
             "WHERE uuid=#{uuid}")
     @Results({
             @Result(property = "idCard", column = "id_card"),
-            @Result(property = "uuid",column = "uuid"),
+            @Result(property = "uuid", column = "uuid"),
             @Result(property = "phone", column = "phonenumber"),
             @Result(property = "name", column = "username"),
             @Result(property = "profilePhoto", column = "image"),
-            @Result(property = "role", column = "authority_id",one = @One(select = "getRole"))
+            @Result(property = "role", column = "authority_id", one = @One(select = "getRole"))
     })
     User findUserById(String uuid);
 

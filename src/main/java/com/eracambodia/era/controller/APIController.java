@@ -42,7 +42,7 @@ import java.util.*;
 @ControllerAdvice
 @RestController
 @RequestMapping("/api")
-@Api(value = "API",description = "response json data for mobile client")
+@Api(value = "API", description = "response json data for mobile client")
 public class APIController {
     @Autowired
     private Service service;
@@ -54,9 +54,9 @@ public class APIController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody Login login,@RequestParam(value = "playerId" ,required = false)String playerId) {
-        service.checkLogin(login,playerId);
-        String role=service.getUserRole(login.getEmail());
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody Login login, @RequestParam(value = "playerId", required = false) String playerId) {
+        service.checkLogin(login, playerId);
+        String role = service.getUserRole(login.getEmail());
         String clientCredential = "client:123";
         String basicAuth = new String(Base64.encodeBase64(clientCredential.getBytes()));
         HttpHeaders headers = new HttpHeaders();
@@ -111,10 +111,10 @@ public class APIController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody Register register,@RequestParam(value = "playerId",required = false)String playerId ,HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody Register register, @RequestParam(value = "playerId", required = false) String playerId, HttpServletRequest request) {
         String jwtToken = request.getHeader("Authorization");
         register.setPassword(passwordEncoder.encode(register.getPassword()));
-        service.register(register, jwtToken,playerId);
+        service.register(register, jwtToken, playerId);
         Response response = new Response(201);
         return response.getResponseEntity();
     }
@@ -152,6 +152,7 @@ public class APIController {
         Response response = new Response(200, downloadUri);
         return response.getResponseEntity("data");
     }
+
     @ApiIgnore
     @GetMapping(value = "/image/user/{fileName:.+}")
     public ResponseEntity viewImage(@PathVariable(value = "fileName") String fileName, HttpServletRequest request) {
@@ -264,13 +265,13 @@ public class APIController {
 
     @PostMapping("/building/status/update")
     public ResponseEntity updateBuildingStatus(@RequestBody BuildingStatusUpdate buildingStatusUpdate, @ApiIgnore Principal principal) {
-        BuildingUpdate buildingUpdate=service.updateBuildingStatus(buildingStatusUpdate, principal.getName());
-        Response response = new Response(200,buildingUpdate);
+        BuildingUpdate buildingUpdate = service.updateBuildingStatus(buildingStatusUpdate, principal.getName());
+        Response response = new Response(200, buildingUpdate);
         return response.getResponseEntity("data");
     }
 
     @GetMapping("/agent/transaction/{userUUID}/{status}")
-    public ResponseEntity agentTransaction(@PathVariable("userUUID")String userUUID,@PathVariable("status") String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
+    public ResponseEntity agentTransaction(@PathVariable("userUUID") String userUUID, @PathVariable("status") String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
         Pagination pagination = new Pagination(page, limit);
         Response response = new Response(200, service.findAgentsTransaction(userUUID, status, pagination), pagination);
         return response.getResponseEntity("data", "pagination");
@@ -331,14 +332,14 @@ public class APIController {
     }
 
     @GetMapping("/agent/transaction/total_commission/{uuid}")
-    public ResponseEntity agentTotalCommission(@PathVariable("uuid")String uuid) {
+    public ResponseEntity agentTotalCommission(@PathVariable("uuid") String uuid) {
         Response response = new Response(200, service.commissionCalculator(uuid));
         return response.getResponseEntity("data");
     }
 
     @GetMapping("/building/files")
-    public ResponseEntity buildingFiles(@RequestParam("buildingUUID")String buildingUUID){
-        Response response=new Response(200,service.getBuildingFiles(buildingUUID));
+    public ResponseEntity buildingFiles(@RequestParam("buildingUUID") String buildingUUID) {
+        Response response = new Response(200, service.getBuildingFiles(buildingUUID));
         return response.getResponseEntity("data");
     }
 

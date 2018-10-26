@@ -26,9 +26,10 @@ public interface Service {
 
     // api/login
     User findUserByEmailOfLogin(String email);
+
     String getUserRole(String email);
 
-    String checkLogin(Login login,String playerId);
+    String checkLogin(Login login, String playerId);
 
     // api/building/{uuid}
     BuildingUUID findBuildingByUUID(String uuid, String email);
@@ -46,7 +47,7 @@ public interface Service {
     Integer findBuildingIdByIdOfBuildingStatusUpdate(int ownerId);
 
     // api/register
-    void register(Register register, String jwtToken,String playerId);
+    void register(Register register, String jwtToken, String playerId);
 
     // api/user
     com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username);
@@ -100,10 +101,10 @@ public interface Service {
     AgentCommission commissionCalculator(String uuid);
 
     // api/users
-    List<Users> getUsers(String role,String name,Pagination pagination);
+    List<Users> getUsers(String role, String name, Pagination pagination);
 
     //api/user/upgrade_to_agent
-    void upgradeToAgent(int userId,Integer leaderId);
+    void upgradeToAgent(int userId, Integer leaderId);
 
     //api/building/files
     List<File> getBuildingFiles(String uuid);

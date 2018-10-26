@@ -15,7 +15,7 @@ public interface NotiToFavoritorRepo {
             "INNER JOIN favorite ON onesignal.user_id=favorite.user_id " +
             "WHERE favorite.owner_id = #{buildingId} " +
             "AND onesignal.user_id <> #{userId}")
-    List<String> findPlayerId(@Param("userId")Integer userId,@Param("buildingId")Integer buildingId);
+    List<String> findPlayerId(@Param("userId") Integer userId, @Param("buildingId") Integer buildingId);
 
     @Select("SELECT image " +
             "FROM users " +
@@ -32,14 +32,15 @@ public interface NotiToFavoritorRepo {
             "WHERE owner_id=#{ownerId} " +
             "ORDER BY id DESC LIMIT 1")
     @Results({
-            @Result(property = "userId",column = "user_id"),
-            @Result(property = "status",column = "status")
+            @Result(property = "userId", column = "user_id"),
+            @Result(property = "status", column = "status")
     })
     Transaction getUserIdFromTransaction(int ownerId);
 
     @Select("SELECT name " +
             "FROM building where id=#{ownerId}")
     String buildingName(int ownerId);
+
     @Select("SELECT username " +
             "FROM users " +
             "WHERE email=#{email}")

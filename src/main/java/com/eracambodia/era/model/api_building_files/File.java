@@ -9,7 +9,7 @@ public class File {
     private String path;
 
     public String getFileName() {
-        String[] s=fileName.split(Pattern.quote("."));
+        String[] s = fileName.split(Pattern.quote("."));
         return s[0];
     }
 
@@ -18,8 +18,8 @@ public class File {
     }
 
     public String getPath() {
-        if(path!=null){
-            return Default.buildingFile+path;
+        if (path != null) {
+            return Default.buildingFile + path;
         }
         return path;
     }

@@ -70,8 +70,8 @@ public class User {
     }
 
     public String getProfilePhoto() {
-        if(profilePhoto!=null)
-            return Default.profilePhoto+profilePhoto;
+        if (profilePhoto != null)
+            return Default.profilePhoto + profilePhoto;
         return profilePhoto;
     }
 

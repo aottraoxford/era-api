@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserUpgradeRepo {
-    @UpdateProvider(type = UserUpgradeProvider.class,method = "upgradeToAgent")
-    Integer upgradeToAgent(@Param("userId") int userId,@Param("leaderId") Integer leaderId);
+    @UpdateProvider(type = UserUpgradeProvider.class, method = "upgradeToAgent")
+    Integer upgradeToAgent(@Param("userId") int userId, @Param("leaderId") Integer leaderId);
 }

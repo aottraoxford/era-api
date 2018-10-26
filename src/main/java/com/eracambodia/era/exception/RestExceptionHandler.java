@@ -40,23 +40,23 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     //RequestParam exception
     @Override
     protected ResponseEntity handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        Response response=new Response(400);
+        Response response = new Response(400);
         response.setMessage(ex.getMessage());
         return response.getResponseEntity();
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        Response response=new Response(400);
+        Response response = new Response(400);
         response.setMessage(ex.getBindingResult().toString());
         return response.getResponseEntity();
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity dataIntegrity(Exception ex) {
-            Response response = new Response(403);
-            response.setMessage(ex.getMessage());
-            return response.getResponseEntity();
+        Response response = new Response(403);
+        response.setMessage(ex.getMessage());
+        return response.getResponseEntity();
     }
 
     @ExceptionHandler(MultipartException.class)

@@ -69,7 +69,7 @@ public class Users {
     }
 
     public String getProfilePhoto() {
-        if(profilePhoto!=null)
+        if (profilePhoto != null)
             return Default.profilePhoto;
         return profilePhoto;
     }

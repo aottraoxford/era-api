@@ -10,7 +10,7 @@ public class AgentCommission {
     private Double agentGot;
 
     public Integer getCount() {
-        if(count==null)
+        if (count == null)
             return 0;
         return count;
     }
@@ -20,7 +20,7 @@ public class AgentCommission {
     }
 
     public Double getBuildingCompleted() {
-        if(buildingCompleted==null)
+        if (buildingCompleted == null)
             return 0.0;
         return buildingCompleted;
     }
@@ -48,7 +48,7 @@ public class AgentCommission {
     }
 
     public Double getAgentGot() {
-        if(agentGot==null)
+        if (agentGot == null)
             return 0.0;
         return agentGot;
     }

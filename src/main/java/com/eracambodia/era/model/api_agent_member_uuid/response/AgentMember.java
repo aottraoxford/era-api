@@ -53,12 +53,12 @@ public class AgentMember {
     }
 
     public String getProfilePhoto() {
-        if(profilePhoto!=null)
-            return Default.profilePhoto+profilePhoto;
+        if (profilePhoto != null)
+            return Default.profilePhoto + profilePhoto;
         return profilePhoto;
     }
 
-    public void setProfilePhoto(String profilePhoto ) {
+    public void setProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 

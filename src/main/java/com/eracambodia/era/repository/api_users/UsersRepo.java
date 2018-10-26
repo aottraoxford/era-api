@@ -11,14 +11,14 @@ import java.util.List;
 
 @Repository
 public interface UsersRepo {
-    @SelectProvider(type = UsersProvider.class,method = "getUsers")
+    @SelectProvider(type = UsersProvider.class, method = "getUsers")
     @Results({
-            @Result(property = "profilePhoto",column = "image"),
+            @Result(property = "profilePhoto", column = "image"),
             @Result(property = "name", column = "username"),
             @Result(property = "registerDate", column = "create_at"),
             @Result(property = "phone", column = "phonenumber")
     })
-    List<Users> getUsers(@Param("role") String role,@Param("name")String name, @Param("pagination")Pagination pagination);
+    List<Users> getUsers(@Param("role") String role, @Param("name") String name, @Param("pagination") Pagination pagination);
 
     @Select({"SELECT count(users.id) " +
             "FROM users " +

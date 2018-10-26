@@ -23,12 +23,13 @@ public class ChangeStatusEvent {
 
     @OnEvent(value = "listenChange")
     public void onEvent(SocketIOClient client, AckRequest request, BuildingUpdate data) {
-        ResponseBuildingUpdate responseBuildingUpdate=new ResponseBuildingUpdate();
+        ResponseBuildingUpdate responseBuildingUpdate = new ResponseBuildingUpdate();
         responseBuildingUpdate.setData(data);
         server.getBroadcastOperations().sendEvent("eventChange", responseBuildingUpdate);
     }
+
     @OnConnect
-    public void onConnect(SocketIOClient socketIOClient){
+    public void onConnect(SocketIOClient socketIOClient) {
         System.out.println("Connected");
     }
 }

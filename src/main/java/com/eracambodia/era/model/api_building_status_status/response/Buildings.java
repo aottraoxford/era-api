@@ -139,7 +139,7 @@ public class Buildings {
     }
 
     public Agent getAgent() {
-        if(getStatus().equalsIgnoreCase("available")){
+        if (getStatus().equalsIgnoreCase("available")) {
             return null;
         }
         return agent;

@@ -37,8 +37,8 @@ public interface RegisterRepo {
     Integer enable(String email);
 
     @Insert("INSERT INTO onesignal(user_id,player_id) " +
-            "VALUES (#{userId},#{playerId})" )
-    int savePlayerId(@Param("userId")int userId,@Param("playerId")String playerId);
+            "VALUES (#{userId},#{playerId})")
+    int savePlayerId(@Param("userId") int userId, @Param("playerId") String playerId);
 
     @Select("SELECT email " +
             "FROM users " +

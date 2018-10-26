@@ -1,8 +1,8 @@
 package com.eracambodia.era.model.socket;
 
 public class ResponseBuildingUpdate {
-    private int code=200;
-    private String message="Success.";
+    private int code = 200;
+    private String message = "Success.";
     private BuildingUpdate data;
 
     public int getCode() {

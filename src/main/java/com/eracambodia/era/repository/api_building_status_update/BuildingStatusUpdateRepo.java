@@ -10,16 +10,16 @@ import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface  BuildingStatusUpdateRepo {
+public interface BuildingStatusUpdateRepo {
 
     @Select(value = "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{userId},#{bookingPrice})}")
     @Results({
-            @Result(property = "id",column = "rbid"),
-            @Result(property = "status",column = "rstatus"),
-            @Result(property = "agent.name",column = "rname"),
-            @Result(property = "agent.id",column = "rid"),
-            @Result(property = "agent.uuid",column = "ruuid"),
-            @Result(property = "agent.profilePhoto",column = "rimage")
+            @Result(property = "id", column = "rbid"),
+            @Result(property = "status", column = "rstatus"),
+            @Result(property = "agent.name", column = "rname"),
+            @Result(property = "agent.id", column = "rid"),
+            @Result(property = "agent.uuid", column = "ruuid"),
+            @Result(property = "agent.profilePhoto", column = "rimage")
     })
     @Options(statementType = StatementType.CALLABLE)
     BuildingUpdate updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate);
@@ -43,7 +43,7 @@ public interface  BuildingStatusUpdateRepo {
             "FROM building " +
             "WHERE id=#{buildingId}")
     @Results({
-            @Result(property = "agent",column = "id",one = @One(select="getAgent"))
+            @Result(property = "agent", column = "id", one = @One(select = "getAgent"))
     })
     BuildingUpdate getBuildingUpdate(int buildingId);
 
@@ -64,7 +64,7 @@ public interface  BuildingStatusUpdateRepo {
             "WHERE owner_id=#{buildingId} " +
             "ORDER BY id DESC LIMIT 1")
     @Results({
-            @Result(property = "userId",column = "user_id")
+            @Result(property = "userId", column = "user_id")
     })
     TransactionOwner checkTransactionOwner(Integer buildingId);
 }

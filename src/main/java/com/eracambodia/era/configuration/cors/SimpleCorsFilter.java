@@ -15,6 +15,7 @@ import java.io.IOException;
 public class SimpleCorsFilter implements Filter {
     public SimpleCorsFilter() {
     }
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 

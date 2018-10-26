@@ -26,7 +26,7 @@ public interface AgentRepo {
             @Result(property = "street", column = "street_number_or_name"),
             @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
             @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
-            @Result(property = "userId",column = "user_id")
+            @Result(property = "userId", column = "user_id")
     })
     List<Agent> findAgentsProcess(@Param("status") String status, @Param("email") String email, @Param("pagination") Pagination pagination);
 
@@ -58,7 +58,7 @@ public interface AgentRepo {
             @Result(property = "street", column = "street_number_or_name"),
             @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
             @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
-            @Result(property = "userId",column = "user_id")
+            @Result(property = "userId", column = "user_id")
     })
     List<Agent> countAgentProcess(@Param("email") String email, @Param("status") String status);
 
@@ -80,7 +80,7 @@ public interface AgentRepo {
             @Result(property = "street", column = "street_number_or_name"),
             @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
             @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
-            @Result(property = "userId",column = "user_id")
+            @Result(property = "userId", column = "user_id")
     })
     List<Agent> findAgentsAllProcess(@Param("email") String email, @Param("pagination") Pagination pagination);
 
@@ -100,7 +100,7 @@ public interface AgentRepo {
             @Result(property = "street", column = "street_number_or_name"),
             @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
             @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
-            @Result(property = "userId",column = "user_id")
+            @Result(property = "userId", column = "user_id")
     })
     List<Agent> countAgentAllProcess(String email);
 

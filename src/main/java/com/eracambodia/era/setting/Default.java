@@ -3,9 +3,10 @@ package com.eracambodia.era.setting;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class Default {
-    public static final String oauthTokenUrl=ServletUriComponentsBuilder.fromCurrentContextPath()
+    public static final String oauthTokenUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
             .path("/oauth/token")
-            .toUriString();;
+            .toUriString();
+    ;
     public static final String profilePhoto = ServletUriComponentsBuilder.fromCurrentContextPath()
             .path("/api/image/user/")
             .toUriString();

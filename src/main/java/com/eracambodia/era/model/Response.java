@@ -66,7 +66,7 @@ public class Response<T> {
         Map<String, Object> map = new HashMap<>();
         map.put("code", getCode());
         map.put("message", getMessage());
-        if(role!=null) {
+        if (role != null) {
             map.put("role", getRole());
         }
         if (getData() != null && data.length > 0) {
@@ -78,7 +78,7 @@ public class Response<T> {
         return new ResponseEntity(map, getHttpStatus());
     }
 
-    private void httpStatus(int code){
+    private void httpStatus(int code) {
         switch (code) {
             case 200:
                 setHttpStatus(HttpStatus.OK);
@@ -107,7 +107,7 @@ public class Response<T> {
         }
     }
 
-    private void statusCode(int code){
+    private void statusCode(int code) {
         switch (code) {
             case 200:
                 setMessage("Successful");

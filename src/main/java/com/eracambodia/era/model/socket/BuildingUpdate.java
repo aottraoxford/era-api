@@ -4,6 +4,7 @@ public class BuildingUpdate {
     private int id;
     private String status;
     private Agent agent;
+
     public String getStatus() {
         return status;
     }
