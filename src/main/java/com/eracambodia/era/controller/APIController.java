@@ -61,7 +61,7 @@ public class APIController {
         String basicAuth = new String(Base64.encodeBase64(clientCredential.getBytes()));
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.add("Authorization", "Basic " + basicAuth);
+            headers.add("Authorization", "Basic " + basicAuth);
         HttpEntity<String> request = new HttpEntity<>(headers);
 
         String grant_type = "password";
