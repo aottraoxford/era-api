@@ -190,8 +190,7 @@ public class APIController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            System.out.println("" +
-                    "Could not determine file type.");
+            System.out.println("Could not determine file type.");
         }
         if (contentType == null) {
             contentType = "application/octet-stream";

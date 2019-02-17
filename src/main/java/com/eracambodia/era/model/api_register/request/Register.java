@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Register {
-    @ApiModelProperty(position = 2)
+    @ApiModelProperty (position = 2)
     private String name;
     @ApiModelProperty(position = 4)
     private String gender;
